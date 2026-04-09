@@ -22,6 +22,8 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 .hero h1 em{color:var(--saffron2);font-style:normal;}
 .hero p{font-size:15px;color:rgba(247,242,234,0.48);line-height:1.7;max-width:500px;margin:0 auto 10px;}
 .gtag{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.22);letter-spacing:1px;}
+
+/* API Key box */
 .apibox{background:rgba(247,242,234,0.03);border:1px solid rgba(247,242,234,0.08);border-radius:14px;padding:16px 18px;margin:0 auto 32px;max-width:640px;}
 .api-lbl{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
 .api-badge{background:rgba(212,137,26,0.12);border:1px solid rgba(212,137,26,0.2);color:var(--saffron2);border-radius:3px;padding:1px 7px;font-size:8px;}
@@ -34,10 +36,14 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 .api-hint{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.18);margin-top:7px;}
 .api-ok{display:none;font-family:'DM Mono',monospace;font-size:9px;color:#4ade80;margin-top:6px;}
 .api-ok.on{display:block;}
+
+/* Grid */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 @media(max-width:680px){.grid{grid-template-columns:1fr;}}
 .panel{background:rgba(247,242,234,0.025);border:1px solid rgba(247,242,234,0.07);border-radius:20px;padding:22px;}
 .phd{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.35);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(247,242,234,0.06);}
+
+/* Upload zone */
 .upzone{border:2px dashed rgba(247,242,234,0.1);border-radius:14px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;background:rgba(247,242,234,0.02);margin-bottom:14px;}
 .upzone:hover{border-color:rgba(212,137,26,0.3);}
 .upzone.loaded{border-color:rgba(212,137,26,0.2);border-style:solid;}
@@ -47,6 +53,8 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 .up-ico{width:44px;height:44px;background:rgba(247,242,234,0.07);border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .up-ico svg{width:20px;height:20px;stroke:rgba(247,242,234,0.4);fill:none;stroke-width:2;}
 .up-txt{font-family:'DM Mono',monospace;font-size:10px;color:rgba(247,242,234,0.3);text-align:center;line-height:1.7;}
+
+/* Samples */
 .slbl{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.25);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;}
 .samples{display:flex;gap:7px;margin-bottom:14px;}
 .samp{width:58px;height:58px;border-radius:9px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s;flex-shrink:0;}
@@ -57,10 +65,14 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 .sb{background:linear-gradient(135deg,#0a1a0a,#183018,#060e06);}
 .sc{background:linear-gradient(135deg,#1a0808,#3a1010,#0e0404);}
 .sd{background:linear-gradient(135deg,#0a0a1a,#1a1a3a,#050510);}
-.abtn-main{width:100%;padding:13px;background:var(--saffron);color:#fff;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;transition:all 0.15s;border:none;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px;}
-.abtn-main:hover{background:var(--saffron2);}
-.abtn-main:disabled{background:rgba(247,242,234,0.08);color:rgba(247,242,234,0.25);cursor:not-allowed;}
-.abtn-main svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;}
+
+/* Flip button */
+.flip-btn{width:100%;padding:14px;background:var(--saffron);color:#fff;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;border-radius:12px;cursor:pointer;transition:all 0.15s;border:none;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px;}
+.flip-btn:hover{background:var(--saffron2);}
+.flip-btn:disabled{background:rgba(247,242,234,0.08);color:rgba(247,242,234,0.25);cursor:not-allowed;}
+.flip-btn svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;}
+
+/* Result panel */
 .rpanel{background:var(--ink2);border:1px solid rgba(247,242,234,0.07);border-radius:20px;padding:22px;display:flex;flex-direction:column;min-height:420px;}
 .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;opacity:0.35;}
 .empty svg{width:44px;height:44px;stroke:rgba(247,242,234,0.4);fill:none;stroke-width:1.5;}
@@ -72,6 +84,8 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 .load-t{font-family:'DM Mono',monospace;font-size:10px;color:rgba(247,242,234,0.35);text-align:center;line-height:1.9;}
 .result{display:none;flex-direction:column;gap:14px;}
 .result.on{display:flex;}
+
+/* Recipe card */
 .rc{background:rgba(24,20,16,0.8);border:1.5px solid rgba(212,137,26,0.25);border-radius:12px;padding:14px;}
 .rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:9px;border-bottom:1px dashed rgba(247,242,234,0.08);}
 .rc-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--saffron2);letter-spacing:2.5px;text-transform:uppercase;display:flex;align-items:center;gap:5px;}
@@ -98,12 +112,16 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 .gattr span{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.22);}
 .err{display:none;background:rgba(201,75,42,0.07);border:1px solid rgba(201,75,42,0.18);border-radius:9px;padding:12px;font-family:'DM Mono',monospace;font-size:10px;color:#fca5a5;line-height:1.6;}
 .err.on{display:block;}
+
+/* Steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px;}
 @media(max-width:560px){.steps{grid-template-columns:1fr;}}
 .step{background:rgba(247,242,234,0.02);border:1px solid rgba(247,242,234,0.05);border-radius:14px;padding:18px;text-align:center;}
 .step-n{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;font-style:italic;color:rgba(212,137,26,0.25);line-height:1;margin-bottom:8px;}
 .step-t{font-size:13px;font-weight:700;color:var(--cream);margin-bottom:5px;}
 .step-d{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.3);line-height:1.7;}
+
+/* Toast */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink2);color:var(--cream);font-family:'DM Mono',monospace;font-size:11px;border-radius:22px;padding:10px 20px;opacity:0;transition:all 0.22s;pointer-events:none;z-index:999;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,0.5);border:1px solid rgba(247,242,234,0.07);}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
 #fileInput{display:none;}
@@ -122,10 +140,11 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 <div class="main">
   <div class="hero">
     <h1>Tap any image.<br><em>Flip to reveal.</em></h1>
-    <p>Every AI image has a hidden prompt behind it. Upload one and watch Gemini flip the Postcard to reveal what made it.</p>
-    <div class="gtag">⚡ Powered by Google Gemini Vision API · postcard-app-492801</div>
+    <p>Every AI image has a hidden prompt behind it. Upload one and Gemini flips the Postcard to reveal what made it.</p>
+    <div class="gtag">⚡ Powered by Google Gemini API · postcard-app-492801</div>
   </div>
 
+  <!-- API Key -->
   <div class="apibox">
     <div class="api-lbl">Gemini API Key <span class="api-badge">aistudio.google.com</span></div>
     <div class="api-row">
@@ -137,6 +156,7 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
   </div>
 
   <div class="grid">
+    <!-- Upload panel -->
     <div class="panel">
       <div class="phd">Upload AI Image</div>
       <div class="upzone" id="upzone" onclick="document.getElementById('fileInput').click()">
@@ -152,12 +172,13 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
         <div class="samp" onclick="pickSample(this,'dark fantasy warrior, dramatic shadows, epic composition, concept art, moody atmosphere')" title="Dark"><div class="sc"></div></div>
         <div class="samp" onclick="pickSample(this,'cyberpunk cityscape, neon lights, rain reflections, futuristic architecture, cinematic mood')" title="Cyber"><div class="sd"></div></div>
       </div>
-      <button class="abtn-main" id="analyzeBtn" onclick="analyze()">
-        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <button class="flip-btn" id="flipBtn" onclick="analyze()">
+        <svg viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
         ✦ Flip to Reveal Recipe
       </button>
     </div>
 
+    <!-- Result panel -->
     <div class="rpanel">
       <div class="phd">The Back of the Postcard</div>
       <div class="empty" id="emptyState">
@@ -166,7 +187,7 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
       </div>
       <div class="loading" id="loadingState">
         <div class="spinner"></div>
-        <div class="load-t" id="loadTxt">Sending to Gemini Vision...<br>Analysing composition...</div>
+        <div class="load-t" id="loadTxt">Sending to Gemini...<br>Analysing image...</div>
       </div>
       <div class="err" id="errBox"></div>
       <div class="result" id="resultState">
@@ -187,16 +208,16 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
         <div class="tags" id="tagsRow"></div>
         <div class="acts">
           <button class="act act-try" onclick="toast('📋 Copy the recipe and paste into Midjourney or DALL·E!')">▶ TRY THIS</button>
-          <button class="act act-remix" onclick="toast('🔀 Remix feature in the full Postcard app!')">⟳ REMIX</button>
+          <button class="act act-remix" onclick="toast('🔀 Remix feature in full Postcard app!')">⟳ REMIX</button>
         </div>
-        <div class="gattr"><span>⚡ Recipe revealed by Gemini Vision · postcard-app-492801</span></div>
+        <div class="gattr"><span>⚡ Recipe revealed by Google Gemini · postcard-app-492801</span></div>
       </div>
     </div>
   </div>
 
   <div class="steps">
     <div class="step"><div class="step-n">01</div><div class="step-t">Upload AI Art</div><div class="step-d">Any image from Midjourney, DALL·E 3, Stable Diffusion, Flux or any AI tool</div></div>
-    <div class="step"><div class="step-n">02</div><div class="step-t">Gemini Analyses</div><div class="step-d">Gemini Vision reads the image — style, mood, lighting — and reconstructs the prompt on the back</div></div>
+    <div class="step"><div class="step-n">02</div><div class="step-t">Gemini Analyses</div><div class="step-d">Gemini Vision reads the image — style, mood, lighting — and reconstructs the recipe on the back</div></div>
     <div class="step"><div class="step-n">03</div><div class="step-t">Flip — Recipe Revealed</div><div class="step-d">The Postcard flips. Full recipe on the back. One tap to copy straight into Midjourney or DALL·E</div></div>
   </div>
 </div>
@@ -204,7 +225,19 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 <div class="toast" id="toastEl"></div>
 
 <script>
-let imgData=null,sampleHint='cinematic portrait, ethereal lighting, soft bokeh, dramatic shadows, 8k resolution, photorealistic',currentRecipe='';
+let imgData=null;
+let sampleHint='cinematic portrait, ethereal lighting, soft bokeh, dramatic shadows, 8k resolution, photorealistic';
+let currentRecipe='';
+
+// Try these models in order until one works
+const MODELS = [
+  'gemini-2.5-flash-preview-04-17',
+  'gemini-2.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-pro',
+  'gemini-1.5-pro',
+  'gemini-pro'
+];
 
 window.onload=()=>{
   if(localStorage.getItem('pc_key')){
@@ -233,7 +266,7 @@ function handleFile(e){
     z.classList.add('loaded');
     z.innerHTML=`<img src="${ev.target.result}"><div class="upzone-ov"><div class="up-txt" style="color:rgba(247,242,234,0.8)">Change image</div></div>`;
     z.onclick=()=>document.getElementById('fileInput').click();
-    toast('✅ Image loaded');
+    toast('✅ Image loaded — ready to flip!');
   };
   r.readAsDataURL(f);
 }
@@ -241,65 +274,125 @@ function handleFile(e){
 function pickSample(el,hint){
   document.querySelectorAll('.samp').forEach(s=>s.classList.remove('on'));
   el.classList.add('on');sampleHint=hint;imgData=null;
-  toast('Sample selected');
+  toast('Sample selected — click Flip to Reveal!');
 }
 
-const msgs=['Sending to Gemini Vision...\nAnalysing image...','Detecting style and mood...\nIdentifying AI signature...','Reconstructing prompt...\nExtracting parameters...','Finalising recipe...'];
+const msgs=[
+  'Sending to Gemini...\nAnalysing image...',
+  'Detecting style and mood...\nReading AI signature...',
+  'Reconstructing prompt...\nExtracting parameters...',
+  'Almost done...\nFinalising recipe...'
+];
+
+async function tryModel(key, modelName, body) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
+  const res = await fetch(url, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  return res;
+}
 
 async function analyze(){
   const key=localStorage.getItem('pc_key')||document.getElementById('apiKey').value.trim();
   if(!key){toast('⚠️ Enter your Gemini API key first');document.getElementById('apiKey').focus();return;}
+
   document.getElementById('emptyState').style.display='none';
   document.getElementById('resultState').classList.remove('on');
   document.getElementById('errBox').classList.remove('on');
   document.getElementById('loadingState').classList.add('on');
-  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('flipBtn').disabled=true;
+
   let mi=0;
-  const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadTxt').innerHTML=msgs[mi];},1600);
+  const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadTxt').innerHTML=msgs[mi];},1500);
+
+  const promptText = imgData
+    ? `Analyse this AI-generated image and reverse-engineer the prompt used to create it. Return ONLY valid JSON (no markdown, no backticks, no explanation): {"prompt":"full reconstructed prompt with technical parameters like --ar --v --stylize","model":"Midjourney or DALL-E 3 or Stable Diffusion or Flux or Unknown","style":"2-4 words","mood":"2-3 words","subject":"3-5 words","lighting":"2-4 words","tags":["tag1","tag2","tag3","tag4","tag5"]}`
+    : `Create a detailed realistic AI image prompt based on this style: "${sampleHint}". Include lighting, composition, artistic style and technical parameters like --ar 4:5 --v 6 --stylize 750. Return ONLY valid JSON (no markdown, no backticks): {"prompt":"full prompt with --parameters","model":"Midjourney","style":"2-4 words","mood":"2-3 words","subject":"3-5 words","lighting":"2-4 words","tags":["tag1","tag2","tag3","tag4","tag5"]}`;
+
+  let requestBody;
+  if(imgData){
+    const b64=imgData.split(',')[1],mime=imgData.split(';')[0].split(':')[1];
+    requestBody={contents:[{parts:[{inline_data:{mime_type:mime,data:b64}},{text:promptText}]}],generationConfig:{temperature:0.3,maxOutputTokens:600}};
+  }else{
+    requestBody={contents:[{parts:[{text:promptText}]}],generationConfig:{temperature:0.6,maxOutputTokens:500}};
+  }
+
+  let lastError = '';
+
   try{
-    let body;
-    if(imgData){
-      const b64=imgData.split(',')[1],mime=imgData.split(';')[0].split(':')[1];
-      body={contents:[{parts:[{inline_data:{mime_type:mime,data:b64}},{text:`Analyse this AI-generated image and reverse-engineer the prompt used to create it. Return ONLY valid JSON no markdown no backticks: {"prompt":"full reconstructed prompt with technical parameters","model":"Midjourney or DALL-E 3 or Stable Diffusion or Flux or Unknown","style":"2-4 words","mood":"2-3 words","subject":"3-5 words","lighting":"2-4 words","tags":["tag1","tag2","tag3","tag4","tag5"]}`}]}],generationConfig:{temperature:0.3,maxOutputTokens:600}};
-    }else{
-      body={contents:[{parts:[{text:`Create a detailed realistic AI image prompt based on this style: "${sampleHint}". Include lighting, composition, camera, artistic style and technical parameters like --ar 4:5 --v 6 --stylize 750. Return ONLY valid JSON no markdown no backticks: {"prompt":"full prompt with --parameters","model":"Midjourney","style":"2-4 words","mood":"2-3 words","subject":"3-5 words","lighting":"2-4 words","tags":["tag1","tag2","tag3","tag4","tag5"]}`}]}],generationConfig:{temperature:0.6,maxOutputTokens:500}};
+    // Try each model until one works
+    for(const model of MODELS){
+      document.getElementById('loadTxt').innerHTML = `Trying ${model}...\nConnecting to Gemini...`;
+      const res = await tryModel(key, model, requestBody);
+
+      if(res.ok){
+        const data = await res.json();
+        const txt = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if(!txt) continue;
+
+        let parsed;
+        try{parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());}
+        catch{const m=txt.match(/\{[\s\S]*\}/);if(m)parsed=JSON.parse(m[0]);else continue;}
+
+        clearInterval(iv);
+        showResult(parsed, model);
+        document.getElementById('flipBtn').disabled=false;
+        return;
+      }else{
+        const e = await res.json();
+        lastError = e.error?.message || `${res.status}`;
+        // If not a model availability error, stop trying
+        if(!lastError.includes('not found') && !lastError.includes('no longer available') && !lastError.includes('not supported')){
+          break;
+        }
+      }
     }
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+
+    // All models failed
     clearInterval(iv);
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`API error ${res.status}`);}
-    const data=await res.json();
-    const txt=data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if(!txt)throw new Error('No response from Gemini');
-    let parsed;
-    try{parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());}
-    catch{const m=txt.match(/\{[\s\S]*\}/);if(m)parsed=JSON.parse(m[0]);else throw new Error('Could not parse response');}
-    showResult(parsed);
+    document.getElementById('loadingState').classList.remove('on');
+    const eb=document.getElementById('errBox');
+    eb.classList.add('on');
+
+    if(lastError.includes('API_KEY_INVALID')||lastError.includes('400')){
+      eb.innerHTML='⚠️ Invalid API key. Please check your key at aistudio.google.com and try again.';
+    }else if(lastError.includes('quota')||lastError.includes('429')){
+      eb.innerHTML='⏳ Rate limit reached. Wait a moment and try again.';
+    }else{
+      eb.innerHTML=`Could not connect to Gemini. Error: ${lastError}<br><br>Please check your API key at aistudio.google.com`;
+    }
+
   }catch(err){
     clearInterval(iv);
     document.getElementById('loadingState').classList.remove('on');
-    const eb=document.getElementById('errBox');eb.classList.add('on');
-    if(err.message.includes('API_KEY_INVALID')||err.message.includes('400'))eb.innerHTML='⚠️ Invalid API key. Check your key at aistudio.google.com';
-    else if(err.message.includes('quota')||err.message.includes('429'))eb.innerHTML='⏳ Rate limit reached. Wait a moment and try again.';
-    else eb.innerHTML=`Error: ${err.message}`;
+    const eb=document.getElementById('errBox');
+    eb.classList.add('on');
+    eb.innerHTML=`Network error: ${err.message}<br>Check your internet connection and try again.`;
   }
-  document.getElementById('analyzeBtn').disabled=false;
+
+  document.getElementById('flipBtn').disabled=false;
 }
 
-function showResult(d){
+function showResult(d, modelUsed){
   document.getElementById('loadingState').classList.remove('on');
   currentRecipe=d.prompt||'';
   document.getElementById('recipeBody').textContent=d.prompt||'Recipe extracted';
-  const m=(d.model||'').toLowerCase(),mel=document.getElementById('modelTag');
-  mel.textContent=d.model||'AI MODEL';
+
+  const m=(d.model||modelUsed||'').toLowerCase();
+  const mel=document.getElementById('modelTag');
+  mel.textContent=d.model||modelUsed||'AI MODEL';
   if(m.includes('midjourney'))mel.style.background='#7c3aed';
   else if(m.includes('dall'))mel.style.background='#059669';
   else if(m.includes('stable')||m.includes('diffusion'))mel.style.background='#dc2626';
   else if(m.includes('flux'))mel.style.background='#0891b2';
   else mel.style.background='#374151';
+
   document.getElementById('bdgrid').innerHTML=[['Subject',d.subject],['Style',d.style],['Mood',d.mood],['Lighting',d.lighting]].filter(([,v])=>v).map(([l,v])=>`<div class="bdi"><div class="bdi-l">${l}</div><div class="bdi-v">${v}</div></div>`).join('');
   document.getElementById('tagsRow').innerHTML=(d.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
   document.getElementById('resultState').classList.add('on');
-  toast('✨ Recipe revealed by Gemini!');
+  toast('✨ Postcard flipped — recipe revealed!');
 }
 
 function copyRecipe(){
@@ -308,7 +401,7 @@ function copyRecipe(){
   const btn=document.getElementById('copyBtn');
   btn.textContent='COPIED!';btn.classList.add('ok');
   setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok');},2000);
-  toast('📋 Recipe copied!');
+  toast('📋 Recipe copied to clipboard!');
 }
 
 let tt;
