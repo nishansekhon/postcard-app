@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Postcard — AI Art Discovery · Stanford x DeepMind</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,700&family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#f7f2ea;--cream2:#efe8db;--cream3:#e4dace;--cream4:#d4c9b8;
+  --ink:#181410;--ink2:#2c2720;--ink3:#46403a;--ink4:#6a6258;
+  --saffron:#d4891a;--saffron2:#f0a832;--ember:#c94b2a;--jade:#1a8a72;
+  --border:#d8d0c4;
+}
+body{background:#1e1b17;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:36px 20px 80px;gap:44px;font-family:'Manrope',sans-serif;}
+
+/* SIDEBAR */
+.sidebar{width:200px;flex-shrink:0;padding-top:8px;position:sticky;top:36px;}
+.brand-mark{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;font-style:italic;color:#f7f2ea;letter-spacing:-0.5px;line-height:1;margin-bottom:3px;}
+.brand-mark em{color:var(--saffron2);font-style:normal;}
+.brand-sub{font-family:'DM Mono',monospace;font-size:8px;color:#4a4540;letter-spacing:3px;text-transform:uppercase;margin-bottom:32px;}
+.snav-label{font-family:'DM Mono',monospace;font-size:8px;color:#3a3530;letter-spacing:2.5px;text-transform:uppercase;padding:0 10px;margin-bottom:8px;}
+.snav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;font-size:11px;color:#6a6258;cursor:pointer;transition:all 0.15s;font-family:'DM Mono',monospace;letter-spacing:0.3px;margin-bottom:2px;}
+.snav-item:hover{background:rgba(247,242,234,0.05);color:#a09890;}
+.snav-item.on{background:rgba(212,137,26,0.1);color:var(--saffron2);}
+.snav-num{width:20px;height:20px;border-radius:50%;background:#2c2720;font-size:9px;display:flex;align-items:center;justify-content:center;color:#6a6258;flex-shrink:0;font-weight:500;transition:all 0.15s;}
+.snav-item.on .snav-num{background:var(--saffron);color:#fff;}
+.sdiv{height:1px;background:#2c2720;margin:16px 10px;}
+.sinfo{background:#141210;border:1px solid #2c2720;border-radius:10px;padding:12px 10px;font-family:'DM Mono',monospace;font-size:9px;color:#4a4540;line-height:2;}
+.sinfo .si{color:#6a6258;}
+.gemini-status{margin-top:12px;background:rgba(26,138,114,0.08);border:1px solid rgba(26,138,114,0.2);border-radius:8px;padding:8px 10px;}
+.gs-label{font-family:'DM Mono',monospace;font-size:8px;color:rgba(247,242,234,0.3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.gs-row{display:flex;gap:6px;margin-bottom:6px;}
+.gs-inp{flex:1;background:rgba(247,242,234,0.05);border:1px solid rgba(247,242,234,0.1);border-radius:6px;padding:5px 8px;font-family:'DM Mono',monospace;font-size:9px;color:#f7f2ea;outline:none;}
+.gs-inp::placeholder{color:rgba(247,242,234,0.2);}
+.gs-btn{background:var(--saffron);color:#fff;font-family:'DM Mono',monospace;font-size:8px;padding:5px 8px;border-radius:6px;cursor:pointer;border:none;white-space:nowrap;}
+.gs-ok{display:none;font-family:'DM Mono',monospace;font-size:8px;color:#4ade80;letter-spacing:0.5px;}
+.gs-ok.on{display:block;}
+
+/* PHONE */
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.phone-tag{font-family:'DM Mono',monospace;font-size:9px;color:#3a3530;letter-spacing:2.5px;text-transform:uppercase;}
+.phone{width:393px;height:852px;background:var(--cream);border-radius:54px;border:10px solid #0e0c0a;overflow:hidden;position:relative;box-shadow:0 0 0 1px #080604,0 0 0 2px #1e1b17,0 60px 140px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.2);}
+.phone::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:126px;height:36px;background:#0e0c0a;border-radius:22px;z-index:80;}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream);overflow:hidden;}
+.screen.on{display:flex;}
+
+/* STATUS BAR */
+.sb{height:54px;padding:0 28px;display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:8px;flex-shrink:0;}
+.sb-t{font-size:15px;font-weight:700;color:var(--ink);}
+.sb-i{display:flex;gap:5px;align-items:center;}
+.sb-i span{display:block;background:var(--ink);border-radius:2px;opacity:0.5;}
+
+/* TOP BAR */
+.topbar{padding:2px 20px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--border);}
+.wordmark{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;font-style:italic;color:var(--ink);letter-spacing:-0.5px;}
+.wordmark em{color:var(--saffron);font-style:normal;}
+.topbar-icons{display:flex;gap:8px;}
+.ticon{width:36px;height:36px;border-radius:50%;background:var(--cream2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;position:relative;}
+.ticon:hover{background:var(--cream3);}
+.ticon svg{width:16px;height:16px;stroke:var(--ink3);fill:none;stroke-width:2;}
+.ticon.notif::after{content:'3';position:absolute;top:5px;right:5px;width:14px;height:14px;background:var(--ember);border-radius:50%;border:2px solid var(--cream);font-size:7px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;}
+
+/* FILTER CHIPS */
+.frow{display:flex;gap:6px;padding:10px 16px 8px;overflow-x:auto;flex-shrink:0;}
+.frow::-webkit-scrollbar{display:none;}
+.fchip{font-family:'DM Mono',monospace;font-size:9px;padding:5px 13px;border-radius:20px;border:1px solid var(--border);color:var(--ink4);white-space:nowrap;cursor:pointer;transition:all 0.18s;flex-shrink:0;letter-spacing:0.5px;background:var(--cream2);}
+.fchip:hover{border-color:var(--ink4);color:var(--ink);}
+.fchip.on{background:var(--ink);color:var(--cream);border-color:var(--ink);font-weight:600;}
+
+/* FEED */
+.feed{flex:1;overflow-y:auto;padding:4px 0 16px;}
+.feed::-webkit-scrollbar{display:none;}
+
+/* POSTCARD */
+.pcard{margin:10px 14px;background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid var(--border);box-shadow:0 3px 16px rgba(24,20,16,0.08);transition:transform 0.2s,box-shadow 0.2s;}
+.pcard:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(24,20,16,0.12);}
+
+/* CARD IMAGE */
+.pcard-img{width:100%;position:relative;overflow:hidden;cursor:pointer;}
+.art{width:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.art.a1{background:linear-gradient(150deg,#0d1520 0%,#1a2540 35%,#2d3a6e 65%,#100820 100%);}
+.art.a2{background:linear-gradient(155deg,#080f08 0%,#102018 40%,#1a3020 70%,#050a05 100%);}
+.art.a3{background:linear-gradient(145deg,#140408 0%,#280a10 35%,#401018 65%,#0e0408 100%);}
+.artblob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.7;}
+.art-grad{position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(transparent,rgba(10,8,6,0.92));}
+.art-toprow{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;z-index:3;}
+
+/* STAMP */
+.stamp{width:52px;height:64px;background:#fff;border-radius:5px;padding:4px;box-shadow:0 2px 10px rgba(0,0,0,0.35);display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid rgba(255,255,255,0.6);}
+.stamp-inner{width:100%;flex:1;border-radius:3px;background:linear-gradient(135deg,var(--saffron),var(--ember));display:flex;align-items:center;justify-content:center;font-size:14px;}
+.stamp-text{font-family:'DM Mono',monospace;font-size:5px;color:var(--ink3);letter-spacing:0.3px;text-align:center;line-height:1.4;}
+.model-pill{font-family:'DM Mono',monospace;font-size:8px;padding:4px 10px;border-radius:20px;font-weight:500;letter-spacing:0.5px;color:#fff;backdrop-filter:blur(8px);}
+.art-botrow{position:absolute;bottom:12px;left:14px;right:14px;display:flex;align-items:flex-end;justify-content:space-between;z-index:3;}
+.creator-info{display:flex;align-items:center;gap:8px;}
+.avi{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.cr-name{font-size:12px;font-weight:600;color:#fff;line-height:1.2;}
+.cr-sub{font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,0.55);letter-spacing:0.3px;margin-top:1px;}
+
+/* FLIP BUTTON */
+.flip-btn{display:flex;align-items:center;gap:5px;background:rgba(247,242,234,0.95);border-radius:22px;padding:7px 14px;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.25);transition:all 0.15s;border:1px solid rgba(255,255,255,0.5);}
+.flip-btn:hover{background:#fff;transform:scale(1.03);}
+.flip-btn:active{transform:scale(0.97);}
+.flip-btn svg{width:13px;height:13px;stroke:var(--ink);fill:none;stroke-width:2.5;}
+.flip-btn-text{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;color:var(--ink);letter-spacing:0.3px;}
+
+/* RECIPE PANEL */
+.recipe-panel{display:none;background:var(--ink);border-top:none;padding:16px;animation:fadeSlide 0.22s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.recipe-panel.show{display:block;}
+.recipe-loading{display:flex;align-items:center;gap:10px;padding:8px 0;}
+.recipe-spinner{width:18px;height:18px;border:2px solid rgba(247,242,234,0.1);border-top-color:var(--saffron);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.recipe-loading-txt{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.4);letter-spacing:0.5px;}
+.recipe-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed rgba(247,242,234,0.15);}
+.recipe-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--saffron2);letter-spacing:2.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.recipe-lbl svg{width:12px;height:12px;stroke:var(--saffron2);fill:none;stroke-width:2;}
+.recipe-actions{display:flex;gap:6px;align-items:center;}
+.model-badge{font-family:'DM Mono',monospace;font-size:8px;padding:3px 8px;border-radius:4px;font-weight:500;color:#fff;letter-spacing:0.5px;}
+.copy-recipe{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.5);background:rgba(247,242,234,0.08);border:1px solid rgba(247,242,234,0.15);border-radius:6px;padding:4px 10px;cursor:pointer;transition:all 0.15s;letter-spacing:0.3px;}
+.copy-recipe:hover{color:var(--saffron2);border-color:rgba(212,137,26,0.4);background:rgba(212,137,26,0.08);}
+.copy-recipe.ok{color:#4ade80;border-color:#4ade80;}
+.recipe-text{font-family:'DM Mono',monospace;font-size:10.5px;color:rgba(247,242,234,0.75);line-height:1.8;margin-bottom:12px;padding:12px;background:rgba(247,242,234,0.04);border-radius:10px;border-left:2px solid var(--saffron);}
+.recipe-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.rtag{font-family:'DM Mono',monospace;font-size:8px;color:rgba(247,242,234,0.4);background:rgba(247,242,234,0.06);border:1px solid rgba(247,242,234,0.1);border-radius:20px;padding:2px 8px;cursor:pointer;transition:all 0.15s;}
+.rtag:hover{color:var(--saffron2);border-color:rgba(212,137,26,0.3);}
+.recipe-btns{display:flex;gap:7px;padding-top:10px;border-top:1px dashed rgba(247,242,234,0.1);}
+.rbtn{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:9px;padding:9px 6px;border-radius:10px;cursor:pointer;transition:all 0.15s;letter-spacing:0.3px;font-weight:500;border:none;}
+.rbtn-try{background:rgba(26,138,114,0.1);border:1px solid rgba(26,138,114,0.25)!important;color:#34d399;}
+.rbtn-try:hover{background:rgba(26,138,114,0.18);}
+.rbtn-remix{background:rgba(212,137,26,0.1);border:1px solid rgba(212,137,26,0.25)!important;color:var(--saffron2);}
+.rbtn-remix:hover{background:rgba(212,137,26,0.18);}
+.rbtn-buy{background:var(--ember);border:1px solid var(--ember)!important;color:#fff;}
+.rbtn-buy:hover{background:#b84224;}
+.gattr{display:flex;align-items:center;gap:6px;padding:8px 11px;background:rgba(66,133,244,0.05);border:1px solid rgba(66,133,244,0.1);border-radius:8px;margin-top:10px;}
+.gattr span{font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.3);}
+
+/* REACTIONS */
+.reactions{padding:10px 16px 12px;display:flex;align-items:center;gap:14px;background:#fff;}
+.rxn{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink4);cursor:pointer;transition:all 0.15s;}
+.rxn svg{width:18px;height:18px;stroke:var(--ink4);fill:none;stroke-width:1.8;transition:all 0.15s;}
+.rxn:hover{color:var(--ink);}
+.rxn:hover svg{stroke:var(--ink);}
+.rxn.hl svg{stroke:var(--ember);fill:rgba(201,75,42,0.1);}
+.rxn.hl{color:var(--ember);}
+.rxn.sv svg{stroke:var(--saffron);}
+.rxn.sv{color:var(--saffron);}
+.copies-pill{margin-left:auto;display:flex;align-items:center;gap:5px;background:rgba(212,137,26,0.08);border:1px solid rgba(212,137,26,0.2);border-radius:20px;padding:4px 10px;}
+.copies-pill svg{width:11px;height:11px;stroke:var(--saffron);fill:none;stroke-width:2;}
+.copies-pill span{font-family:'DM Mono',monospace;font-size:9px;color:var(--saffron);letter-spacing:0.3px;}
+
+/* BOTTOM NAV */
+.bnav{height:78px;background:#fff;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 10px 12px;flex-shrink:0;}
+.nitem{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 10px;border-radius:12px;transition:all 0.15s;}
+.nitem:hover{background:var(--cream2);}
+.nitem svg{width:22px;height:22px;stroke:var(--cream4);fill:none;stroke-width:1.8;transition:stroke 0.2s;}
+.nitem span{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--cream4);letter-spacing:0.5px;transition:color 0.2s;}
+.nitem.on svg{stroke:var(--ink);}
+.nitem.on span{color:var(--ink);}
+.npost{width:52px;height:42px;background:var(--ink);border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.1s,background 0.15s;}
+.npost:hover{transform:scale(1.04);}
+.npost svg{width:20px;height:20px;stroke:var(--cream);fill:none;stroke-width:2.5;}
+
+/* EXPLORE SCREEN */
+.explore-top{padding:8px 20px 12px;flex-shrink:0;}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--ink);letter-spacing:-0.5px;font-style:italic;}
+.searchbar{margin:0 16px 10px;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:9px;flex-shrink:0;box-shadow:0 1px 6px rgba(24,20,16,0.06);}
+.searchbar svg{width:15px;height:15px;stroke:var(--ink4);fill:none;stroke-width:2;flex-shrink:0;}
+.searchbar span{font-family:'DM Mono',monospace;font-size:11px;color:var(--cream4);}
+.section-ttl{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:2px;text-transform:uppercase;padding:0 16px 8px;flex-shrink:0;}
+.packs-scroll{display:flex;gap:10px;padding:0 16px 14px;overflow-x:auto;flex-shrink:0;}
+.packs-scroll::-webkit-scrollbar{display:none;}
+.pack-card{width:160px;flex-shrink:0;background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(24,20,16,0.06);}
+.pack-card:hover{box-shadow:0 6px 20px rgba(24,20,16,0.12);transform:translateY(-2px);}
+.pack-thumb{height:80px;}
+.pack-body{padding:10px 11px 11px;}
+.pack-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.pack-creator{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-bottom:6px;}
+.pack-footer{display:flex;align-items:center;justify-content:space-between;}
+.pack-price{font-size:13px;font-weight:700;color:var(--ink);}
+.pack-buy-btn{font-family:'DM Mono',monospace;font-size:8px;background:var(--ink);color:var(--cream);border-radius:20px;padding:4px 10px;cursor:pointer;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 16px;flex:1;overflow:hidden;}
+.mgrid-item{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(24,20,16,0.06);}
+.mgrid-item:hover{transform:scale(0.98);}
+.mgrid-item:first-child{grid-row:span 2;}
+.mgrid-art{width:100%;display:block;min-height:90px;}
+.mgrid-info{padding:8px 10px;}
+.mgrid-name{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.mgrid-count{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);}
+
+/* POST SCREEN */
+.post-header{padding:8px 20px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--border);}
+.post-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;font-style:italic;color:var(--ink);}
+.cancel-lnk{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);cursor:pointer;letter-spacing:0.5px;}
+.post-scroll{flex:1;overflow-y:auto;padding:14px 16px;}
+.post-scroll::-webkit-scrollbar{display:none;}
+.upload-box{border:2px dashed var(--border);border-radius:18px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:border-color 0.2s;background:var(--cream2);margin-bottom:14px;}
+.upload-box:hover{border-color:var(--ink);}
+.upload-ico{width:46px;height:46px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(24,20,16,0.1);}
+.upload-ico svg{width:20px;height:20px;stroke:var(--ink3);fill:none;stroke-width:2;}
+.upload-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;line-height:1.7;}
+.autodetect{background:rgba(26,138,114,0.05);border:1px solid rgba(26,138,114,0.2);border-radius:12px;padding:11px 13px;display:flex;align-items:flex-start;gap:9px;margin-bottom:13px;}
+.ad-ico{width:26px;height:26px;background:rgba(26,138,114,0.1);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.ad-ico svg{width:13px;height:13px;stroke:var(--jade);fill:none;stroke-width:2;}
+.ad-title{font-size:11px;font-weight:600;color:var(--jade);margin-bottom:2px;}
+.ad-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);line-height:1.5;}
+.fgroup{margin-bottom:12px;}
+.flabel{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
+.auto-tag{font-size:8px;color:var(--jade);background:rgba(26,138,114,0.08);border:1px solid rgba(26,138,114,0.2);border-radius:3px;padding:1px 6px;letter-spacing:0.3px;}
+.finput{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:10px 13px;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink2);line-height:1.5;width:100%;}
+.finput.tall{min-height:70px;}
+.finput.ph{color:var(--cream4);}
+.pricing-box{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:13px;margin-bottom:13px;}
+.pricing-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.poptions{display:flex;gap:7px;}
+.popt{flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);text-align:center;cursor:pointer;transition:all 0.18s;background:var(--cream2);}
+.popt.on{background:var(--ink);border-color:var(--ink);}
+.popt-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:0.5px;transition:color 0.15s;}
+.popt.on .popt-lbl{color:rgba(247,242,234,0.6);}
+.popt-val{font-size:16px;font-weight:700;color:var(--ink2);margin-top:3px;transition:color 0.15s;font-family:'Cormorant Garamond',serif;}
+.popt.on .popt-val{color:var(--cream);}
+.pub-btn{width:100%;background:var(--ink);color:var(--cream);font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;border-radius:16px;padding:16px;text-align:center;cursor:pointer;transition:all 0.15s;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(24,20,16,0.25);}
+.pub-btn:hover{background:var(--ink2);}
+
+/* PROFILE SCREEN */
+.prof-scroll{flex:1;overflow-y:auto;}
+.prof-scroll::-webkit-scrollbar{display:none;}
+.prof-hero{padding:48px 20px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.prof-avi{width:76px;height:76px;border-radius:50%;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;box-shadow:0 4px 16px rgba(24,20,16,0.12);}
+.prof-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;}
+.prof-handle{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);}
+.verified-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(212,137,26,0.08);border:1px solid rgba(212,137,26,0.2);border-radius:20px;padding:4px 10px;margin-top:2px;}
+.verified-badge span{font-family:'DM Mono',monospace;font-size:8px;color:var(--saffron);letter-spacing:0.5px;}
+.prof-stats{display:flex;gap:0;margin:10px 16px 0;background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
+.pstat{flex:1;padding:11px 8px;text-align:center;border-right:1px solid var(--border);}
+.pstat:last-child{border-right:none;}
+.pstat-num{font-size:17px;font-weight:800;color:var(--ink);}
+.pstat-lbl{font-family:'DM Mono',monospace;font-size:7px;color:var(--ink4);letter-spacing:1px;margin-top:3px;}
+.pstat.gold{background:rgba(212,137,26,0.04);}
+.pstat.gold .pstat-num{color:var(--saffron);}
+.pstat.gold .pstat-lbl{color:var(--saffron);}
+.prof-action-row{display:flex;gap:8px;margin:12px 16px 0;}
+.pabtn{flex:1;padding:10px;border-radius:12px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;text-align:center;cursor:pointer;transition:all 0.15s;letter-spacing:0.3px;}
+.pabtn.follow{background:var(--ink);color:var(--cream);}
+.pabtn.follow:hover{background:var(--ink2);}
+.pabtn.follow.ing{background:var(--cream2);color:var(--ink);border:1.5px solid var(--border);}
+.pabtn.msg{background:var(--cream2);color:var(--ink);border:1.5px solid var(--border);}
+.prof-tabs{display:flex;border-bottom:1px solid var(--border);margin-top:14px;}
+.ptab{flex:1;padding:10px 8px;text-align:center;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:1px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
+.ptab.on{color:var(--ink);border-bottom-color:var(--ink);}
+.pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;overflow:hidden;}
+.pgrid-item{aspect-ratio:1;position:relative;cursor:pointer;overflow:hidden;transition:opacity 0.15s;}
+.pgrid-item:hover{opacity:0.85;}
+.pgrid-hover{position:absolute;inset:0;background:rgba(24,20,16,0);transition:background 0.15s;display:flex;align-items:center;justify-content:center;}
+.pgrid-item:hover .pgrid-hover{background:rgba(24,20,16,0.2);}
+.pgrid-badge{position:absolute;bottom:5px;right:5px;font-family:'DM Mono',monospace;background:rgba(24,20,16,0.65);border-radius:4px;padding:2px 5px;font-size:8px;color:var(--saffron2);}
+
+/* RIGHT PANEL */
+.rpanel{width:210px;flex-shrink:0;padding-top:8px;position:sticky;top:36px;}
+.rp-head{font-family:'DM Mono',monospace;font-size:8px;color:#3a3530;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #2c2720;}
+.diff-block{margin-bottom:14px;}
+.diff-ig{background:#1e1b17;border:1px solid #2c2720;border-radius:8px;padding:10px 11px;margin-bottom:5px;}
+.diff-ig-label{font-family:'DM Mono',monospace;font-size:7px;color:#ef4444;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.diff-ig-text{font-size:9.5px;color:#5a5550;line-height:1.5;}
+.diff-arrow{text-align:center;font-family:'DM Mono',monospace;font-size:9px;color:#3a3530;margin-bottom:5px;}
+.diff-pc{background:rgba(212,137,26,0.06);border:1px solid rgba(212,137,26,0.15);border-radius:8px;padding:10px 11px;}
+.diff-pc-label{font-family:'DM Mono',monospace;font-size:7px;color:var(--saffron2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.diff-pc-text{font-size:9.5px;color:#8a8278;line-height:1.5;}
+.diff-pc-text strong{color:#c0b8ae;}
+.rp-divider{height:1px;background:#2c2720;margin:16px 0;}
+.gemini-badge{background:rgba(66,133,244,0.08);border:1px solid rgba(66,133,244,0.15);border-radius:10px;padding:12px;}
+.gb-title{font-family:'DM Mono',monospace;font-size:8px;color:rgba(66,133,244,0.8);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.gb-item{font-size:9px;color:#5a5550;line-height:1.7;padding-left:10px;position:relative;margin-bottom:4px;}
+.gb-item::before{content:'⚡';position:absolute;left:0;font-size:8px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink2);color:var(--cream);font-family:'DM Mono',monospace;font-size:11px;border-radius:22px;padding:10px 20px;opacity:0;transition:all 0.22s;pointer-events:none;z-index:999;white-space:nowrap;box-shadow:0 6px 24px rgba(0,0,0,0.5);border:1px solid rgba(247,242,234,0.07);}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="brand-mark">Post<em>card</em></div>
+  <div class="brand-sub">Stanford × DeepMind</div>
+  <div class="snav-label">SCREENS</div>
+  <div class="snav-item on" onclick="goscr('feed',this)"><div class="snav-num">1</div>Home Feed</div>
+  <div class="snav-item" onclick="goscr('explore',this)"><div class="snav-num">2</div>Explore</div>
+  <div class="snav-item" onclick="goscr('upload',this)"><div class="snav-num">3</div>Post Card</div>
+  <div class="snav-item" onclick="goscr('profile',this)"><div class="snav-num">4</div>Profile</div>
+  <div class="sdiv"></div>
+  <div class="sinfo">
+    <span class="si">👆</span> Tap image → flip<br>
+    <span class="si">↕</span> Scroll the feed<br>
+    <span class="si">♥</span> Like / Save / Copy<br>
+    <span class="si">💰</span> Buy recipe packs<br>
+    <span class="si">⚡</span> Powered by Gemini
+  </div>
+  <!-- Gemini API Key input -->
+  <div class="gemini-status">
+    <div class="gs-label">Gemini API Key</div>
+    <div class="gs-row">
+      <input class="gs-inp" type="password" id="apiKey" placeholder="AIza..." autocomplete="off">
+      <button class="gs-btn" onclick="saveKey()">SAVE</button>
+    </div>
+    <div class="gs-ok" id="apiOk">✓ Gemini live</div>
+  </div>
+</div>
+
+<!-- PHONE -->
+<div class="phone-wrap">
+  <div class="phone-tag">POSTCARD — LIVE GEMINI DEMO</div>
+  <div class="phone">
+
+    <!-- ══ FEED SCREEN ══ -->
+    <div class="screen on" id="screen-feed">
+      <div class="sb">
+        <span class="sb-t">9:41</span>
+        <div class="sb-i"><span style="width:20px;height:6px;border-radius:2px"></span><span style="width:15px;height:6px;border-radius:2px"></span><span style="width:24px;height:6px;border-radius:2px"></span></div>
+      </div>
+      <div class="topbar">
+        <div class="wordmark">Post<em>card</em></div>
+        <div class="topbar-icons">
+          <div class="ticon notif"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="ticon" onclick="goscr('explore',null)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fchip on" onclick="chipsel(this)">ALL</div>
+        <div class="fchip" onclick="chipsel(this)">PORTRAIT</div>
+        <div class="fchip" onclick="chipsel(this)">LANDSCAPE</div>
+        <div class="fchip" onclick="chipsel(this)">SPORTS</div>
+        <div class="fchip" onclick="chipsel(this)">PRODUCT</div>
+        <div class="fchip" onclick="chipsel(this)">ANIME</div>
+      </div>
+
+      <div class="feed">
+        <!-- CARD 1 -->
+        <div class="pcard" id="c1">
+          <div class="pcard-img" onclick="flipcard('rp1','rb1','cinematic portrait of a woman, ethereal lighting, soft bokeh, dramatic shadows, 8k resolution, photorealistic')">
+            <div class="art a1" style="height:320px">
+              <div class="artblob" style="width:240px;height:240px;background:#6b21a8;top:10px;left:10px;"></div>
+              <div class="artblob" style="width:180px;height:180px;background:#1d4ed8;bottom:20px;right:5px;"></div>
+              <div class="artblob" style="width:110px;height:110px;background:#0891b2;top:120px;right:70px;"></div>
+            </div>
+            <div class="art-toprow">
+              <div class="stamp"><div class="stamp-inner">🎨</div><div class="stamp-text">MJ v6<br>4:5</div></div>
+              <div class="model-pill" style="background:rgba(124,58,237,0.8)">MIDJOURNEY</div>
+            </div>
+            <div class="art-grad"></div>
+            <div class="art-botrow">
+              <div class="creator-info">
+                <div class="avi" style="background:linear-gradient(135deg,#9333ea,#3b82f6)">N</div>
+                <div><div class="cr-name">@neural_artx</div><div class="cr-sub">Midjourney Master · 14.2k</div></div>
+              </div>
+              <div class="flip-btn" onclick="flipcard('rp1','rb1','cinematic portrait of a woman, ethereal lighting, soft bokeh, dramatic shadows, 8k resolution, photorealistic');event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                <span class="flip-btn-text" id="rb1">FLIP TO REVEAL</span>
+              </div>
+            </div>
+          </div>
+          <div class="recipe-panel" id="rp1"></div>
+          <div class="reactions">
+            <div class="rxn" onclick="togglerxn(this,'2.4k','2.4k+1')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>2.4k</span></div>
+            <div class="rxn" onclick="toast('💬 Comments in full app')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>84</span></div>
+            <div class="rxn" onclick="togglerxn(this,'319','320')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>319</span></div>
+            <div class="copies-pill"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>1.2k copies</span></div>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="pcard" id="c2">
+          <div class="pcard-img" onclick="flipcard('rp2','rb2','mystical forest spirit, bioluminescent mushrooms, golden hour light shafts, fantasy art, hyperdetailed, painterly')">
+            <div class="art a2" style="height:290px">
+              <div class="artblob" style="width:200px;height:200px;background:#064e3b;top:20px;right:10px;"></div>
+              <div class="artblob" style="width:150px;height:150px;background:#b45309;bottom:10px;left:20px;"></div>
+            </div>
+            <div class="art-toprow">
+              <div class="stamp"><div class="stamp-inner" style="background:linear-gradient(135deg,#10b981,#f59e0b)">🌿</div><div class="stamp-text">DALL·E<br>2:3</div></div>
+              <div class="model-pill" style="background:rgba(5,150,105,0.8)">DALL·E 3</div>
+            </div>
+            <div class="art-grad"></div>
+            <div class="art-botrow">
+              <div class="creator-info">
+                <div class="avi" style="background:linear-gradient(135deg,#059669,#d97706)">W</div>
+                <div><div class="cr-name">@wade_pixels</div><div class="cr-sub">Sports AI · 28k followers</div></div>
+              </div>
+              <div class="flip-btn" onclick="flipcard('rp2','rb2','mystical forest spirit, bioluminescent mushrooms, golden hour light shafts, fantasy art, hyperdetailed, painterly');event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                <span class="flip-btn-text" id="rb2">FLIP TO REVEAL</span>
+              </div>
+            </div>
+          </div>
+          <div class="recipe-panel" id="rp2"></div>
+          <div class="reactions">
+            <div class="rxn" onclick="togglerxn(this,'1.1k','1.1k+1')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>1.1k</span></div>
+            <div class="rxn" onclick="toast('💬 Comments in full app')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>47</span></div>
+            <div class="rxn" onclick="togglerxn(this,'203','204')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>203</span></div>
+            <div class="copies-pill"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>847 copies</span></div>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="pcard" id="c3">
+          <div class="pcard-img" onclick="flipcard('rp3','rb3','cyberpunk samurai warrior, neon Tokyo rain, ultra detailed armor, volumetric fog, cinematic, dark atmosphere')">
+            <div class="art a3" style="height:310px">
+              <div class="artblob" style="width:210px;height:210px;background:#991b1b;top:5px;left:30px;"></div>
+              <div class="artblob" style="width:140px;height:140px;background:#6d28d9;bottom:10px;right:20px;"></div>
+            </div>
+            <div class="art-toprow">
+              <div class="stamp"><div class="stamp-inner" style="background:linear-gradient(135deg,#ef4444,#7c3aed)">⚡</div><div class="stamp-text">SD XL<br>4:5</div></div>
+              <div class="model-pill" style="background:rgba(220,38,38,0.8)">STABLE DIFF</div>
+            </div>
+            <div class="art-grad"></div>
+            <div class="art-botrow">
+              <div class="creator-info">
+                <div class="avi" style="background:linear-gradient(135deg,#ef4444,#7c3aed)">B</div>
+                <div><div class="cr-name">@bcreative_7</div><div class="cr-sub">Badal Desai · 55.3k</div></div>
+              </div>
+              <div class="flip-btn" onclick="flipcard('rp3','rb3','cyberpunk samurai warrior, neon Tokyo rain, ultra detailed armor, volumetric fog, cinematic, dark atmosphere');event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                <span class="flip-btn-text" id="rb3">FLIP TO REVEAL</span>
+              </div>
+            </div>
+          </div>
+          <div class="recipe-panel" id="rp3"></div>
+          <div class="reactions">
+            <div class="rxn" onclick="togglerxn(this,'3.7k','3.7k+1')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>3.7k</span></div>
+            <div class="rxn" onclick="toast('💬 Comments in full app')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>142</span></div>
+            <div class="rxn" onclick="togglerxn(this,'521','522')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>521</span></div>
+            <div class="copies-pill"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>2.1k copies</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bnav">
+        <div class="nitem on" onclick="goscr('feed',null)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>HOME</span></div>
+        <div class="nitem" onclick="goscr('explore',null)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>EXPLORE</span></div>
+        <div class="npost" onclick="goscr('upload',null)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="nitem" onclick="toast('❤️ Saved cards')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>SAVED</span></div>
+        <div class="nitem" onclick="goscr('profile',null)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>PROFILE</span></div>
+      </div>
+    </div>
+
+    <!-- ══ EXPLORE SCREEN ══ -->
+    <div class="screen" id="screen-explore">
+      <div class="sb"><span class="sb-t">9:41</span><div class="sb-i"><span style="width:20px;height:6px;border-radius:2px"></span></div></div>
+      <div class="explore-top"><div class="page-title">Explore</div></div>
+      <div class="searchbar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>search recipes, styles, models...</span></div>
+      <div class="frow">
+        <div class="fchip on" onclick="chipsel(this)">TRENDING</div>
+        <div class="fchip" onclick="chipsel(this)">PORTRAIT</div>
+        <div class="fchip" onclick="chipsel(this)">SPORTS</div>
+        <div class="fchip" onclick="chipsel(this)">PRODUCT</div>
+        <div class="fchip" onclick="chipsel(this)">ANIME</div>
+      </div>
+      <div class="section-ttl">FEATURED PACKS</div>
+      <div class="packs-scroll">
+        <div class="pack-card" onclick="toast('💰 Anime Soccer Pack — 12 recipes · $1.99')">
+          <div class="pack-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)"></div>
+          <div class="pack-body"><div class="pack-name">Anime Soccer</div><div class="pack-creator">by @wade_pixels</div><div class="pack-footer"><span class="pack-price">$1.99</span><div class="pack-buy-btn">BUY</div></div></div>
+        </div>
+        <div class="pack-card" onclick="toast('💰 Cinematic Portraits — 20 recipes · $2.99')">
+          <div class="pack-thumb" style="background:linear-gradient(135deg,#0a1a2e,#1a3a4e)"></div>
+          <div class="pack-body"><div class="pack-name">Cinematic Portraits</div><div class="pack-creator">by @neural_artx</div><div class="pack-footer"><span class="pack-price">$2.99</span><div class="pack-buy-btn">BUY</div></div></div>
+        </div>
+        <div class="pack-card" onclick="toast('💰 Dark Fantasy — 15 recipes · $1.99')">
+          <div class="pack-thumb" style="background:linear-gradient(135deg,#0a1a0a,#1a3a1a)"></div>
+          <div class="pack-body"><div class="pack-name">Dark Fantasy</div><div class="pack-creator">by @bcreative_7</div><div class="pack-footer"><span class="pack-price">$1.99</span><div class="pack-buy-btn">BUY</div></div></div>
+        </div>
+      </div>
+      <div class="section-ttl">BROWSE BY STYLE</div>
+      <div class="mgrid">
+        <div class="mgrid-item" onclick="goscr('feed',null)"><div class="mgrid-art" style="background:linear-gradient(135deg,#1a0a3e,#3b1a6e);height:200px;"></div><div class="mgrid-info"><div class="mgrid-name">Cinematic</div><div class="mgrid-count">2.4k postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('🌲 Dark Fantasy')"><div class="mgrid-art" style="background:linear-gradient(135deg,#0a1a0a,#1a3a1a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Dark Fantasy</div><div class="mgrid-count">1.1k postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('⚽ Sports AI')"><div class="mgrid-art" style="background:linear-gradient(135deg,#0a1a0a,#2a3a0a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Sports AI</div><div class="mgrid-count">654 postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('🌆 Neon City')"><div class="mgrid-art" style="background:linear-gradient(135deg,#0a0a2a,#1a1a4a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Neon City</div><div class="mgrid-count">890 postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('🎌 Anime Style')"><div class="mgrid-art" style="background:linear-gradient(135deg,#1a0a1a,#3a1a3a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Anime Style</div><div class="mgrid-count">3.2k postcards</div></div></div>
+      </div>
+      <div class="bnav">
+        <div class="nitem" onclick="goscr('feed',null)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>HOME</span></div>
+        <div class="nitem on"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>EXPLORE</span></div>
+        <div class="npost" onclick="goscr('upload',null)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="nitem" onclick="toast('❤️ Saved')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>SAVED</span></div>
+        <div class="nitem" onclick="goscr('profile',null)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>PROFILE</span></div>
+      </div>
+    </div>
+
+    <!-- ══ UPLOAD SCREEN ══ -->
+    <div class="screen" id="screen-upload">
+      <div class="sb"><span class="sb-t">9:41</span></div>
+      <div class="post-header"><div class="post-title">New Postcard</div><div class="cancel-lnk" onclick="goscr('feed',null)">CANCEL</div></div>
+      <div class="post-scroll">
+        <div class="upload-box" onclick="toast('📁 Image picker opens here')">
+          <div class="upload-ico"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+          <div class="upload-lbl">TAP TO UPLOAD AI IMAGE<br>Midjourney · DALL·E · Stable Diffusion</div>
+        </div>
+        <div class="autodetect">
+          <div class="ad-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><div class="ad-title">✦ Recipe Auto-Detected by Gemini</div><div class="ad-sub">Found prompt in image metadata — pre-filled below. Edit if needed.</div></div>
+        </div>
+        <div class="fgroup">
+          <div class="flabel">THE RECIPE <span class="auto-tag">GEMINI AUTO-FILLED</span></div>
+          <div class="finput tall">Ethereal portrait, bioluminescent skin, deep ocean background, cinematic lighting --ar 4:5 --v 6 --stylize 800</div>
+        </div>
+        <div class="fgroup">
+          <div class="flabel">AI MODEL</div>
+          <div class="finput">Midjourney v6</div>
+        </div>
+        <div class="fgroup">
+          <div class="flabel">CAPTION <span style="font-size:8px;color:var(--cream4)">(OPTIONAL)</span></div>
+          <div class="finput ph">Add a caption...</div>
+        </div>
+        <div class="pricing-box">
+          <div class="pricing-title">SHARING OPTIONS</div>
+          <div class="poptions">
+            <div class="popt on" onclick="poptsel(this)"><div class="popt-lbl">FREE</div><div class="popt-val">$0</div></div>
+            <div class="popt" onclick="poptsel(this)"><div class="popt-lbl">PREMIUM</div><div class="popt-val">$0.99</div></div>
+            <div class="popt" onclick="poptsel(this)"><div class="popt-lbl">PACK</div><div class="popt-val">$1.99+</div></div>
+          </div>
+        </div>
+        <div class="pub-btn" onclick="toast('🚀 Postcard published!');setTimeout(()=>goscr('feed',null),1400)">PUBLISH POSTCARD</div>
+      </div>
+      <div class="bnav">
+        <div class="nitem" onclick="goscr('feed',null)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>HOME</span></div>
+        <div class="nitem" onclick="goscr('explore',null)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>EXPLORE</span></div>
+        <div class="npost" style="background:var(--ember)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="nitem" onclick="toast('❤️ Saved')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>SAVED</span></div>
+        <div class="nitem" onclick="goscr('profile',null)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>PROFILE</span></div>
+      </div>
+    </div>
+
+    <!-- ══ PROFILE SCREEN ══ -->
+    <div class="screen" id="screen-profile">
+      <div class="sb"><span class="sb-t">9:41</span></div>
+      <div class="prof-scroll">
+        <div class="prof-hero">
+          <div class="prof-avi" style="background:linear-gradient(135deg,#d4891a,#c94b2a)">B</div>
+          <div class="prof-name">Badal Desai</div>
+          <div class="prof-handle">@bcreative_7 · AI Visual Designer</div>
+          <div class="verified-badge"><span>✦ VERIFIED CREATOR</span></div>
+        </div>
+        <div class="prof-stats">
+          <div class="pstat"><div class="pstat-num">387</div><div class="pstat-lbl">CARDS</div></div>
+          <div class="pstat"><div class="pstat-num">55.3k</div><div class="pstat-lbl">FOLLOWERS</div></div>
+          <div class="pstat gold"><div class="pstat-num">128k</div><div class="pstat-lbl">COPIES</div></div>
+          <div class="pstat gold"><div class="pstat-num">$842</div><div class="pstat-lbl">EARNED</div></div>
+        </div>
+        <div class="prof-action-row">
+          <div class="pabtn follow" id="followbtn" onclick="togglefollow()">FOLLOW</div>
+          <div class="pabtn msg" onclick="toast('💬 Messaging in full app')">MESSAGE</div>
+        </div>
+        <div class="prof-tabs"><div class="ptab on">POSTCARDS</div><div class="ptab" onclick="toast('🛍️ Packs for sale')">PACKS</div><div class="ptab" onclick="toast('❤️ Liked cards')">LIKED</div></div>
+        <div class="pgrid">
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#1a0a3e,#2d1b4e)"><div class="pgrid-hover"></div><div class="pgrid-badge">⌘</div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#0a1a0a,#1a3a1a)"><div class="pgrid-hover"></div><div class="pgrid-badge">⌘</div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#2e0a0a,#4e1a1a)"><div class="pgrid-hover"></div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#1a1a0a,#3a3a1a)"><div class="pgrid-hover"></div><div class="pgrid-badge">⌘</div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#0a1a1a,#1a3a3a)"><div class="pgrid-hover"></div><div class="pgrid-badge">⌘</div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#1a0a1a,#3a1a3a)"><div class="pgrid-hover"></div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#0a0a2e,#1a1a4e)"><div class="pgrid-hover"></div><div class="pgrid-badge">⌘</div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#2e1a0a,#4e3a1a)"><div class="pgrid-hover"></div></div>
+          <div class="pgrid-item" onclick="goscr('feed',null)" style="background:linear-gradient(135deg,#0a2e1a,#1a4e3a)"><div class="pgrid-hover"></div><div class="pgrid-badge">⌘</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="nitem" onclick="goscr('feed',null)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>HOME</span></div>
+        <div class="nitem" onclick="goscr('explore',null)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>EXPLORE</span></div>
+        <div class="npost" onclick="goscr('upload',null)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="nitem" onclick="toast('❤️ Saved')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>SAVED</span></div>
+        <div class="nitem on"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>PROFILE</span></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toastEl"></div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="rpanel">
+  <div class="rp-head">VS INSTAGRAM</div>
+  <div class="diff-block">
+    <div class="diff-ig"><div class="diff-ig-label">❌ Instagram</div><div class="diff-ig-text">Prompts buried in carousels — 5 swipes to find</div></div>
+    <div class="diff-arrow">↓ fixed by</div>
+    <div class="diff-pc"><div class="diff-pc-label">✅ Postcard</div><div class="diff-pc-text"><strong>One tap flip</strong> — recipe instantly on card back</div></div>
+  </div>
+  <div class="diff-block">
+    <div class="diff-ig"><div class="diff-ig-label">❌ Instagram</div><div class="diff-ig-text">Monetise via Gumroad PDF — 6 steps, 2 platforms</div></div>
+    <div class="diff-arrow">↓ fixed by</div>
+    <div class="diff-pc"><div class="diff-pc-label">✅ Postcard</div><div class="diff-pc-text"><strong>Native packs</strong> — Free / $0.99 / $1.99+ built in</div></div>
+  </div>
+  <div class="diff-block">
+    <div class="diff-ig"><div class="diff-ig-label">❌ Instagram</div><div class="diff-ig-text">No metric for prompt value — just likes</div></div>
+    <div class="diff-arrow">↓ fixed by</div>
+    <div class="diff-pc"><div class="diff-pc-label">✅ Postcard</div><div class="diff-pc-text"><strong>Copies count</strong> + <strong>Earnings</strong> — unique creator metrics</div></div>
+  </div>
+  <div class="rp-divider"></div>
+  <div class="gemini-badge">
+    <div class="gb-title">⚡ Gemini Powers</div>
+    <div class="gb-item">Recipe auto-extraction from image</div>
+    <div class="gb-item">Style + mood + lighting detection</div>
+    <div class="gb-item">Auto-tagging on upload</div>
+    <div class="gb-item">Content moderation at scale</div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+// Proxy URL — set this to your DigitalOcean app URL
+// e.g. https://postcard-proxy-xxxxx.ondigitalocean.app
+const PROXY_URL = 'https://postcard-proxy-j7w75.ondigitalocean.app';
+const USE_PROXY = true; // set false to use direct API with key in sidebar
+
+const MODELS=['gemini-2.5-flash-preview-04-17','gemini-2.5-flash','gemini-2.5-pro','gemini-1.5-pro','gemini-pro'];
+let recipeCache={};
+
+// ── API KEY ──
+window.onload=()=>{
+  if(localStorage.getItem('pc_key')){
+    document.getElementById('apiKey').placeholder='● Saved';
+    document.getElementById('apiOk').classList.add('on');
+  }
+};
+
+function saveKey(){
+  const k=document.getElementById('apiKey').value.trim();
+  if(!k||!k.startsWith('AIza')){toast('⚠️ Enter valid AIza... key');return;}
+  localStorage.setItem('pc_key',k);
+  document.getElementById('apiKey').value='';
+  document.getElementById('apiKey').placeholder='● Saved';
+  document.getElementById('apiOk').classList.add('on');
+  toast('✅ Gemini connected!');
+}
+
+// ── NAVIGATION ──
+function goscr(name,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('screen-'+name).classList.add('on');
+  if(el){document.querySelectorAll('.snav-item').forEach(i=>i.classList.remove('on'));el.classList.add('on');}
+}
+
+// ── FLIP MECHANIC ──
+async function flipcard(panelId,btnId,hint){
+  const panel=document.getElementById(panelId);
+  const btn=document.getElementById(btnId);
+  const isOpen=panel.classList.contains('show');
+
+  if(isOpen){
+    panel.classList.remove('show');
+    panel.innerHTML='';
+    btn.textContent='FLIP TO REVEAL';
+    return;
+  }
+
+  // If cached, show immediately
+  if(recipeCache[panelId]){
+    showRecipe(panel,btn,recipeCache[panelId]);
+    return;
+  }
+
+  const key=localStorage.getItem('pc_key');
+
+  // Show loading
+  panel.classList.add('show');
+  panel.innerHTML=`<div style="background:var(--ink);padding:14px;border-top:2px solid var(--saffron);"><div class="recipe-loading"><div class="recipe-spinner"></div><div class="recipe-loading-txt">Gemini is reading the image...</div></div></div>`;
+  btn.textContent='READING...';
+
+  try{
+    let result=null;
+
+    if(USE_PROXY){
+      // Use secure backend proxy — key never exposed
+      const res=await fetch(`${PROXY_URL}/api/gemini`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({prompt:hint})
+      });
+      if(res.ok) result=await res.json();
+    } else if(key){
+      // Fallback: direct API with sidebar key
+      const body={contents:[{parts:[{text:`Create a detailed realistic Midjourney-style AI image prompt based on: "${hint}". Return ONLY valid JSON: {"prompt":"full prompt with --ar --v --stylize","model":"Midjourney","style":"2-4 words","mood":"2-3 words","subject":"3-5 words","lighting":"2-4 words","tags":["tag1","tag2","tag3","tag4","tag5"]}`}]}],generationConfig:{temperature:0.7,maxOutputTokens:400}};
+      for(const model of MODELS){
+        const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        if(res.ok){
+          const data=await res.json();
+          const txt=data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if(txt){try{result=JSON.parse(txt.replace(/```json|```/g,'').trim());}catch{const m=txt.match(/\{[\s\S]*\}/);if(m)result=JSON.parse(m[0]);}if(result)break;}
+        }else{const e=await res.json();const msg=e.error?.message||'';if(!msg.includes('not found')&&!msg.includes('no longer'))break;}
+      }
+    } else {
+      panel.innerHTML=`<div style="background:var(--ink);padding:12px;border-top:2px solid var(--saffron);font-family:'DM Mono',monospace;font-size:9px;color:rgba(247,242,234,0.5);">⚠️ Add your Gemini API key in the sidebar</div>`;
+      btn.textContent='ADD API KEY →';
+      return;
+    }
+
+    if(result){
+      recipeCache[panelId]=result;
+      showRecipe(panel,btn,result);
+    }else{
+      panel.innerHTML=`<div style="background:var(--ink);padding:14px;border-top:2px solid var(--ember);font-family:'DM Mono',monospace;font-size:9px;color:#fca5a5;">Could not connect to Gemini. Check your API key.</div>`;
+      btn.textContent='FLIP TO REVEAL';
+    }
+  }catch(e){
+    panel.innerHTML=`<div style="background:var(--ink);padding:14px;border-top:2px solid var(--ember);font-family:'DM Mono',monospace;font-size:9px;color:#fca5a5;">Network error. Check connection.</div>`;
+    btn.textContent='FLIP TO REVEAL';
+  }
+}
+
+function showRecipe(panel,btn,d){
+  const modelColors={'midjourney':'#7c3aed','dall':'#059669','stable':'#dc2626','flux':'#0891b2'};
+  const m=(d.model||'').toLowerCase();
+  let mc='#374151';
+  for(const[k,v] of Object.entries(modelColors)){if(m.includes(k)){mc=v;break;}}
+
+  const recipe=d.prompt||'';
+  const id='r_'+Math.random().toString(36).substr(2,6);
+
+  panel.innerHTML=`
+    <div style="background:var(--ink);padding:16px;border-top:2px solid var(--saffron);">
+      <div class="recipe-top">
+        <div class="recipe-lbl"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>THE RECIPE</div>
+        <div class="recipe-actions">
+          <span class="model-badge" style="background:${mc}">${d.model||'AI'}</span>
+          <div class="copy-recipe" id="${id}" onclick="copyR('${id}',\`${recipe.replace(/`/g,"'")}\`)">COPY</div>
+        </div>
+      </div>
+      <div class="recipe-text">${recipe}</div>
+      <div class="recipe-tags">${(d.tags||[]).map(t=>`<span class="rtag">${t}</span>`).join('')}</div>
+      <div class="recipe-btns">
+        <button class="rbtn rbtn-try" onclick="toast('📋 Copy recipe → paste into Midjourney!')">▶ TRY THIS</button>
+        <button class="rbtn rbtn-remix" onclick="toast('🔀 Remix in full app!')">⟳ REMIX</button>
+        <button class="rbtn rbtn-buy" onclick="toast('💰 Get full pack from this creator!')">🔥 BUY PACK</button>
+      </div>
+      <div class="gattr"><span>⚡ Recipe revealed by Google Gemini · postcard-app-492801</span></div>
+    </div>`;
+
+  panel.classList.add('show');
+  btn.textContent='HIDE RECIPE';
+  toast('✨ Postcard flipped — recipe revealed by Gemini!');
+}
+
+function copyR(id,text){
+  if(navigator.clipboard)navigator.clipboard.writeText(text);
+  const btn=document.getElementById(id);
+  if(btn){btn.textContent='COPIED!';btn.classList.add('ok');setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok');},2000);}
+  toast('📋 Recipe copied!');
+}
+
+// ── UTILS ──
+function togglerxn(el,off,on){
+  el.classList.toggle('hl');
+  const sp=el.querySelector('span');
+  if(sp)sp.textContent=el.classList.contains('hl')?on:off;
+}
+
+function chipsel(el){
+  el.closest('.frow').querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function poptsel(el){
+  el.closest('.poptions').querySelectorAll('.popt').forEach(o=>o.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function togglefollow(){
+  const b=document.getElementById('followbtn');
+  b.classList.toggle('ing');
+  b.textContent=b.classList.contains('ing')?'FOLLOWING':'FOLLOW';
+  toast(b.classList.contains('ing')?'✅ Following @bcreative_7':'👋 Unfollowed');
+}
+
+let tt;
+function toast(msg){
+  const el=document.getElementById('toastEl');
+  el.textContent=msg;el.classList.add('on');
+  clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),2400);
+}
+</script>
+</body>
+</html>
