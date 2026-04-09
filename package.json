@@ -1,10 +1,11 @@
 {
-    "name": "postcard-app",
-    "version": "1.0.0",
-    "scripts": {
-          "start": "npx serve . -p 8080"
-    },
-    "dependencies": {
-          "serve": "^14.0.0"
-    }
+      "name": "postcard-app",
+      "version": "1.0.0",
+      "scripts": {
+              "build": "mkdir -p public && cp *.html public/",
+              "start": "npx serve public -p 8080"
+      },
+      "dependencies": {
+              "serve": "^14.0.0"
+      }
 }
