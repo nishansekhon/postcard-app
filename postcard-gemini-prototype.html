@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Postcard — AI Recipe Extractor · Stanford x DeepMind</title>
+<title>Postcard — Flip to Reveal · Stanford x DeepMind</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,700&family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -121,8 +121,8 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
 
 <div class="main">
   <div class="hero">
-    <h1>Every AI image has a<br><em>secret recipe.</em></h1>
-    <p>Upload any AI-generated image and Gemini Vision automatically extracts the prompt — revealing the recipe behind the art.</p>
+    <h1>Tap any image.<br><em>Flip to reveal.</em></h1>
+    <p>Every AI image has a hidden prompt behind it. Upload one and watch Gemini flip the Postcard to reveal what made it.</p>
     <div class="gtag">⚡ Powered by Google Gemini Vision API · postcard-app-492801</div>
   </div>
 
@@ -154,15 +154,15 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
       </div>
       <button class="abtn-main" id="analyzeBtn" onclick="analyze()">
         <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Reveal Recipe with Gemini
+        ✦ Flip to Reveal Recipe
       </button>
     </div>
 
     <div class="rpanel">
-      <div class="phd">The Recipe</div>
+      <div class="phd">The Back of the Postcard</div>
       <div class="empty" id="emptyState">
         <svg viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
-        <div class="empty-t">Upload an image and click<br>Reveal Recipe to see the magic</div>
+        <div class="empty-t">Tap flip to reveal<br>the recipe on the back</div>
       </div>
       <div class="loading" id="loadingState">
         <div class="spinner"></div>
@@ -189,15 +189,15 @@ header{padding:20px 40px;display:flex;align-items:center;justify-content:space-b
           <button class="act act-try" onclick="toast('📋 Copy the recipe and paste into Midjourney or DALL·E!')">▶ TRY THIS</button>
           <button class="act act-remix" onclick="toast('🔀 Remix feature in the full Postcard app!')">⟳ REMIX</button>
         </div>
-        <div class="gattr"><span>⚡ Recipe extracted by Google Gemini Vision · postcard-app-492801</span></div>
+        <div class="gattr"><span>⚡ Recipe revealed by Gemini Vision · postcard-app-492801</span></div>
       </div>
     </div>
   </div>
 
   <div class="steps">
     <div class="step"><div class="step-n">01</div><div class="step-t">Upload AI Art</div><div class="step-d">Any image from Midjourney, DALL·E 3, Stable Diffusion, Flux or any AI tool</div></div>
-    <div class="step"><div class="step-n">02</div><div class="step-t">Gemini Analyses</div><div class="step-d">Google Gemini Vision reads style, composition and lighting to reconstruct the recipe</div></div>
-    <div class="step"><div class="step-n">03</div><div class="step-t">Recipe Revealed</div><div class="step-d">Full prompt revealed on the Postcard back. One tap to copy and recreate the art</div></div>
+    <div class="step"><div class="step-n">02</div><div class="step-t">Gemini Analyses</div><div class="step-d">Gemini Vision reads the image — style, mood, lighting — and reconstructs the prompt on the back</div></div>
+    <div class="step"><div class="step-n">03</div><div class="step-t">Flip — Recipe Revealed</div><div class="step-d">The Postcard flips. Full recipe on the back. One tap to copy straight into Midjourney or DALL·E</div></div>
   </div>
 </div>
 
