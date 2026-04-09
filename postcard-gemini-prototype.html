@@ -264,7 +264,7 @@ async function analyze(){
     }else{
       body={contents:[{parts:[{text:`Create a detailed realistic AI image prompt based on this style: "${sampleHint}". Include lighting, composition, camera, artistic style and technical parameters like --ar 4:5 --v 6 --stylize 750. Return ONLY valid JSON no markdown no backticks: {"prompt":"full prompt with --parameters","model":"Midjourney","style":"2-4 words","mood":"2-3 words","subject":"3-5 words","lighting":"2-4 words","tags":["tag1","tag2","tag3","tag4","tag5"]}`}]}],generationConfig:{temperature:0.6,maxOutputTokens:500}};
     }
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     clearInterval(iv);
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`API error ${res.status}`);}
     const data=await res.json();
