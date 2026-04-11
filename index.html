@@ -81,9 +81,9 @@ body{background:#2a2a3e;display:flex;align-items:flex-start;justify-content:cent
 /* CARD IMAGE */
 .pcard-img{width:100%;position:relative;overflow:hidden;cursor:pointer;}
 .art{width:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.art.a1{background:linear-gradient(150deg,#0d1520 0%,#1a2540 35%,#2d3a6e 65%,#100820 100%);}
-.art.a2{background:linear-gradient(155deg,#080f08 0%,#102018 40%,#1a3020 70%,#050a05 100%);}
-.art.a3{background:linear-gradient(145deg,#140408 0%,#280a10 35%,#401018 65%,#0e0408 100%);}
+.art.a1{background:url('https://images.unsplash.com/photo-1681412332858-cec1bf3c759e?w=500&fit=crop') center/cover;}
+.art.a2{background:url('https://images.unsplash.com/photo-1683009427666-340595e57e43?w=500&fit=crop') center/cover;}
+.art.a3{background:url('https://images.unsplash.com/photo-1684779847639-fbcc5a57dfe9?w=500&fit=crop') center/cover;}
 .artblob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.7;}
 .art-grad{position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(transparent,rgba(10,8,6,0.92));}
 .art-toprow{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;z-index:3;}
@@ -174,7 +174,7 @@ body{background:#2a2a3e;display:flex;align-items:flex-start;justify-content:cent
 .packs-scroll::-webkit-scrollbar{display:none;}
 .pack-card{width:160px;flex-shrink:0;background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(24,20,16,0.06);}
 .pack-card:hover{box-shadow:0 6px 20px rgba(24,20,16,0.12);transform:translateY(-2px);}
-.pack-thumb{height:80px;}
+.background:url('https://images.unsplash.com/photo-1683009427666-340595e57e43?w=300&fit=crop') center/cover{height:80px;}
 .pack-body{padding:10px 11px 11px;}
 .pack-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px;}
 .pack-creator{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-bottom:6px;}
@@ -460,11 +460,11 @@ body{background:#2a2a3e;display:flex;align-items:flex-start;justify-content:cent
       <div class="section-ttl">FEATURED PACKS</div>
       <div class="packs-scroll">
         <div class="pack-card" onclick="toast('💰 Anime Soccer Pack — 12 recipes · $1.99')">
-          <div class="pack-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)"></div>
+          <div class="pack-thumb" style="background:url('https://images.unsplash.com/photo-1681412332858-cec1bf3c759e?w=300&fit=crop') center/cover"></div>
           <div class="pack-body"><div class="pack-name">Anime Soccer</div><div class="pack-creator">by @wade_pixels</div><div class="pack-footer"><span class="pack-price">$1.99</span><div class="pack-buy-btn">BUY</div></div></div>
         </div>
         <div class="pack-card" onclick="toast('💰 Cinematic Portraits — 20 recipes · $2.99')">
-          <div class="pack-thumb" style="background:linear-gradient(135deg,#0a1a2e,#1a3a4e)"></div>
+          <div class="pack-thumb" style="background:url('https://images.unsplash.com/photo-1683009427666-340595e57e43?w=300&fit=crop') center/cover"></div>
           <div class="pack-body"><div class="pack-name">Cinematic Portraits</div><div class="pack-creator">by @neural_artx</div><div class="pack-footer"><span class="pack-price">$2.99</span><div class="pack-buy-btn">BUY</div></div></div>
         </div>
         <div class="pack-card" onclick="toast('💰 Dark Fantasy — 15 recipes · $1.99')">
@@ -474,11 +474,11 @@ body{background:#2a2a3e;display:flex;align-items:flex-start;justify-content:cent
       </div>
       <div class="section-ttl">BROWSE BY STYLE</div>
       <div class="mgrid">
-        <div class="mgrid-item" onclick="goscr('feed',null)"><div class="mgrid-art" style="background:linear-gradient(135deg,#1a0a3e,#3b1a6e);height:200px;"></div><div class="mgrid-info"><div class="mgrid-name">Cinematic</div><div class="mgrid-count">2.4k postcards</div></div></div>
-        <div class="mgrid-item" onclick="toast('🌲 Dark Fantasy')"><div class="mgrid-art" style="background:linear-gradient(135deg,#0a1a0a,#1a3a1a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Dark Fantasy</div><div class="mgrid-count">1.1k postcards</div></div></div>
-        <div class="mgrid-item" onclick="toast('⚽ Sports AI')"><div class="mgrid-art" style="background:linear-gradient(135deg,#0a1a0a,#2a3a0a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Sports AI</div><div class="mgrid-count">654 postcards</div></div></div>
-        <div class="mgrid-item" onclick="toast('🌆 Neon City')"><div class="mgrid-art" style="background:linear-gradient(135deg,#0a0a2a,#1a1a4a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Neon City</div><div class="mgrid-count">890 postcards</div></div></div>
-        <div class="mgrid-item" onclick="toast('🎌 Anime Style')"><div class="mgrid-art" style="background:linear-gradient(135deg,#1a0a1a,#3a1a3a);height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Anime Style</div><div class="mgrid-count">3.2k postcards</div></div></div>
+        <div class="mgrid-item" onclick="goscr('feed',null)"><div class="mgrid-art" style="background:url('https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=300&fit=crop') center/cover;height:200px;"></div><div class="mgrid-info"><div class="mgrid-name">Cinematic</div><div class="mgrid-count">2.4k postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('🌲 Dark Fantasy')"><div class="mgrid-art" style="background:url('https://images.unsplash.com/photo-1686191128892-3b37add4a028?w=300&fit=crop') center/cover;height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Dark Fantasy</div><div class="mgrid-count">1.1k postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('⚽ Sports AI')"><div class="mgrid-art" style="background:url('https://images.unsplash.com/photo-1683009427500-71296178737f?w=300&fit=crop') center/cover;height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Sports AI</div><div class="mgrid-count">654 postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('🌆 Neon City')"><div class="mgrid-art" style="background:url('https://images.unsplash.com/photo-1684163761883-8a8e825c?w=300&fit=crop') center/cover;height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Neon City</div><div class="mgrid-count">890 postcards</div></div></div>
+        <div class="mgrid-item" onclick="toast('🎌 Anime Style')"><div class="mgrid-art" style="background:url('https://images.unsplash.com/photo-1682695796497-31a44224d6d6?w=300&fit=crop') center/cover;height:90px;"></div><div class="mgrid-info"><div class="mgrid-name">Anime Style</div><div class="mgrid-count">3.2k postcards</div></div></div>
       </div>
       <div class="bnav">
         <div class="nitem" onclick="goscr('feed',null)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>HOME</span></div>
